@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/cole/Desktop/snake/build",
+  "command": "/usr/bin/c++  -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/SnakeGame.dir/main.cpp.o -c /Users/cole/Desktop/snake/main.cpp",
+  "file": "/Users/cole/Desktop/snake/main.cpp",
+  "output": "CMakeFiles/SnakeGame.dir/main.cpp.o"
+}
+]
