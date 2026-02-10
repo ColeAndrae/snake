@@ -13,14 +13,16 @@ const float DELAY = 0.2;
 
 char direction = 'R';
 
-bool gameOver = 0;
-
-float x = 0.0;
-float y = 0.0;
+std::vector<char> directions = {'R', 'R', 'R', 'R', 'R'};
+std::vector<std::vector<float>> positions = {{4 * PIXEL_LENGTH, 0},
+                                             {3 * PIXEL_LENGTH, 0},
+                                             {2 * PIXEL_LENGTH, 0},
+                                             {1 * PIXEL_LENGTH, 0},
+                                             {0 * PIXEL_LENGTH, 0}};
 
 sf::RenderWindow window(sf::VideoMode({BOARD_HEIGHT, BOARD_WIDTH}), "Snake");
 
-sf::RectangleShape snakeHead({PIXEL_LENGTH, PIXEL_LENGTH});
+sf::RectangleShape snake({PIXEL_LENGTH, PIXEL_LENGTH});
 sf::RectangleShape line({3, 3});
 
 void drawGridLines() {
@@ -36,35 +38,44 @@ void drawGridLines() {
   }
 }
 
-void updateSnake() {
-  if (direction == 'L') {
-    x -= PIXEL_LENGTH;
-  } else if (direction == 'R') {
-    x += PIXEL_LENGTH;
-  } else if (direction == 'U') {
-    y -= PIXEL_LENGTH;
-  } else if (direction == 'D') {
-    y += PIXEL_LENGTH;
+bool updateSnake() {
+  directions[0] = direction;
+  for (float i = 0; i < positions.size(); i++) {
+    if (directions[i] == 'R') {
+      positions[i][0] += PIXEL_LENGTH;
+    } else if (directions[i] == 'L') {
+      positions[i][0] -= PIXEL_LENGTH;
+    } else if (directions[i] == 'U') {
+      positions[i][1] -= PIXEL_LENGTH;
+    } else if (directions[i] == 'D') {
+      positions[i][1] += PIXEL_LENGTH;
+    }
+    snake.setPosition({positions[i][0], positions[i][1]});
+    window.draw(snake);
   }
-  if (x < 0 || y < 0 || x >= BOARD_WIDTH || y >= BOARD_HEIGHT) {
-    gameOver = 1;
+  for (float i = positions.size() - 1; i > 0; i--) {
+    directions[i] = directions[i - 1];
   }
-  snakeHead.setPosition({x, y});
-  window.draw(snakeHead);
+  if (positions.back()[0] <= 0 || positions.back()[1] < 0 ||
+      positions.back()[0] >= BOARD_WIDTH ||
+      positions.back()[1] >= BOARD_HEIGHT) {
+    return 1;
+  }
+  return 0;
 }
 
 int main() {
   sf::Clock clock;
   float timer = 0;
 
-  snakeHead.setFillColor(sf::Color(snakeColor));
+  snake.setFillColor(sf::Color(snakeColor));
   line.setFillColor(sf::Color(lineColor));
   while (window.isOpen()) {
     sf::Time elapsed = clock.restart();
     timer += elapsed.asSeconds();
 
     while (const std::optional event = window.pollEvent()) {
-      if (event->is<sf::Event::Closed>() || gameOver) {
+      if (event->is<sf::Event::Closed>()) {
         window.close();
       }
       if (const auto *keyPressed = event->getIf<sf::Event::KeyPressed>()) {
@@ -83,7 +94,9 @@ int main() {
     if (timer > DELAY) {
       timer = 0.0;
       window.clear(backgroundColor);
-      updateSnake();
+      if (updateSnake()) {
+        window.close();
+      }
       drawGridLines();
       window.display();
     }
