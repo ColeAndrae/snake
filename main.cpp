@@ -4,14 +4,14 @@
 
 const int BOARD_HEIGHT = 800;
 const int BOARD_WIDTH = 800;
-const int PIXEL_LENGTH = 50;
+const int PIXEL_LENGTH = 100;
 
 const sf::Color backgroundColor = {26, 26, 26};
 const sf::Color snakeColor = {68, 194, 68};
 const sf::Color appleColor = {200, 21, 21};
 const sf::Color lineColor = {217, 217, 217};
 
-const float DELAY = 0.1;
+const float DELAY = 0.2;
 
 std::random_device rd;
 std::mt19937 gen(rd());

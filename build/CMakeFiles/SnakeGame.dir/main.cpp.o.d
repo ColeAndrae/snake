@@ -1,4 +1,5 @@
-CMakeFiles/SnakeGame.dir/main.cpp.o: /Users/cole/Desktop/snake/main.cpp \
+CMakeFiles/SnakeGame.dir/main.cpp.o: \
+  /Users/cole/Desktop/projects/snake/main.cpp \
   /opt/homebrew/include/SFML/Graphics.hpp \
   /opt/homebrew/include/SFML/Graphics/BlendMode.hpp \
   /opt/homebrew/include/SFML/Graphics/Export.hpp \
